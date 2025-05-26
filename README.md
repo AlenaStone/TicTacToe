@@ -37,13 +37,13 @@ This is a classic TicTacToe game for two players. The game is played on a 3x3 gr
 
 
 ```bash
-mvn exec:java -Dexec.mainClass=at.fhj.msd.server.Server
+mvn exec:java "-Dexec.mainClass=at.fhj.msd.server.Server"
 ```
 
 3. In the second and third terminal, start the client:
 
 ```bash
-mvn exec:java -Dexec.mainClass=at.fhj.msd.client.Client
+mvn exec:java "-Dexec.mainClass=at.fhj.msd.client.Client"
 ```
 
 4. Follow the prompts in the client console to play.
