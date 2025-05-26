@@ -1,74 +1,113 @@
 package at.fhj.msd;
 
+/**
+ * Represents the game field for Tic Tac Toe.
+ * Manages the 3x3 grid, validates moves, and checks game state.
+ */
 public class GameField {
+    private final char[][] field = new char[3][3];
 
-    private char[][] field = new char[3][3]; // Создаем поле 3x3
-
+    /**
+     * Gets a copy of the current game field state.
+     * @return 3x3 char array representing the game field
+     */
     public char[][] getField() {
-        return this.field; // Возвращаем текущее состояние поля
+        char[][] copy = new char[3][3];
+        for (int i = 0; i < 3; i++) {
+            System.arraycopy(field[i], 0, copy[i], 0, 3);
+        }
+        return copy;
     }
 
+    /**
+     * Initializes the game field with empty spaces.
+     */
     public void initField() {
         for (int i = 0; i < field.length; i++) {
             for (int j = 0; j < field[i].length; j++) {
-                field[i][j] = ' ';  // Заполняем каждую ячейку символом ' '
+                field[i][j] = ' ';
             }
         }
     }
 
+    /**
+     * Attempts to make a move on the game field.
+     * @param row the row index (0-2)
+     * @param column the column index (0-2)
+     * @param symbol the player symbol (X or O)
+     * @return true if move was successful, false otherwise
+     */
     public boolean doStep(int row, int column, char symbol) {
-        // Проверка на допустимые координаты
-        if (row > 2 || column > 2 || row < 0 || column < 0) {
-            System.out.println("Error: Invalid coordinates!");
-            return false;  // Завершаем метод, если координаты не валидны
+        if (!isValidCoordinate(row, column)) {
+            System.out.println("Error: Coordinates must be between 0-2!");
+            return false;
         }
-        if (symbol != 'X' && symbol != 'O') {
-            System.out.println("Error: Invalid symbol!");
-            return false; // Завершаем метод, если символ не валиден
+        
+        if (!isValidSymbol(symbol)) {
+            System.out.println("Error: Symbol must be X or O!");
+            return false;
         }
-        // Проверка на занятость ячейки
-        if (field[row][column] != ' ') {
-            System.out.println("Sorry, this cell is already occupied.");
-            return false; // Завершаем метод, если ячейка уже занята
-        } else {
-            field[row][column] = symbol; // Заполняем ячейку символом игрока
-            return true; // Возвращаем true, если ход успешен
+        
+        if (isCellOccupied(row, column)) {
+            System.out.println("Error: Cell is already occupied!");
+            return false;
         }
+        
+        field[row][column] = symbol;
+        return true;
     }
 
+    /**
+     * Checks if the specified symbol has won the game.
+     * @param symbol the symbol to check (X or O)
+     * @return true if the symbol has a winning line, false otherwise
+     */
     public boolean checkWin(char symbol) {
-
-        for (int i = 0; i < field.length; i++) {
-            if (field[i][0] == symbol && field[i][1] == symbol && field[i][2] == symbol) {
-                return true; // Проверка по строкам
-            }
-            if (field[0][i] == symbol && field[1][i] == symbol && field[2][i] == symbol) {
-                return true; // Проверка по столбцам
+        // Check rows and columns
+        for (int i = 0; i < 3; i++) {
+            if (checkLine(field[i][0], field[i][1], field[i][2], symbol) || 
+                checkLine(field[0][i], field[1][i], field[2][i], symbol)) {
+                return true;
             }
         }
-        if (field[0][0] == symbol && field[1][1] == symbol && field[2][2] == symbol) {
-            return true; // Проверка по диагонали
-        }
-        if (field[0][2] == symbol && field[1][1] == symbol && field[2][0] == symbol) {
-            return true; // Проверка по диагонали
-        }
-
-        return false; // Если ни одно из условий не выполнено, возвращаем false
+        
+        // Check diagonals
+        return checkLine(field[0][0], field[1][1], field[2][2], symbol) || 
+               checkLine(field[0][2], field[1][1], field[2][0], symbol);
     }
 
+    /**
+     * Checks if the game has ended in a draw.
+     * @return true if all cells are filled with no winner, false otherwise
+     */
     public boolean isDraw() {
-
         if (checkWin('X') || checkWin('O')) {
-            return false; // 
+            return false;
         }
-        for (int i = 0; i < field.length; i++) {
-            for (int j = 0; j < field[i].length; j++) {
-                if (field[i][j] == ' ') {
-                    return false; // Если есть пустая ячейка, игра не закончена
+        
+        for (char[] row : field) {
+            for (char cell : row) {
+                if (cell == ' ') {
+                    return false;
                 }
-
             }
         }
-        return true; // Если нет пустых ячеек и нет победителя, игра закончена вничью
+        return true;
+    }
+
+    private boolean isValidCoordinate(int row, int column) {
+        return row >= 0 && row < 3 && column >= 0 && column < 3;
+    }
+
+    private boolean isValidSymbol(char symbol) {
+        return symbol == 'X' || symbol == 'O';
+    }
+
+    private boolean isCellOccupied(int row, int column) {
+        return field[row][column] != ' ';
+    }
+
+    private boolean checkLine(char a, char b, char c, char symbol) {
+        return a == symbol && b == symbol && c == symbol;
     }
 }

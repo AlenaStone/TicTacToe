@@ -1,47 +1,63 @@
 package at.fhj.msd;
 
+/**
+ * Handles the visual representation of the Tic Tac Toe game field.
+ * Responsible for displaying the current state of the game board.
+ */
 public class GameLook {
+    private final GameField gameField;
 
-    private GameField gameField; // Поле игры
-
+    /**
+     * Creates a new GameLook instance with the specified game field.
+     * @param gameField the game field to visualize
+     */
     public GameLook(GameField gameField) {
-        this.gameField = gameField; // Инициализация поля игры
+        this.gameField = gameField;
     }
 
+    /**
+     * Prints the current state of the game field to the console.
+     * Displays the board with row and column indicators and proper formatting.
+     */
     public void printField() {
-        char[][] field = gameField.getField(); // Получаем текущее состояние поля
+        char[][] field = gameField.getField();
+        
+        // Print column headers
         System.out.println(" " + 0 + " |  " + 1 + " | " + 2);
-        System.out.println("---+----+---+");
-        for (int i = 0; i < field.length; i++) {
-            for (int j = 0; j < field[i].length; j++) {
-                if (j < 2) {
-                    if (field[i][j] == ' ') {
-                        System.out.print(" _ | ");
-                    } else {
-                        System.out.print(" " + field[i][j] + " | ");
-                    }
-                }
-
-                if (j == 2) {
-                    if (field[i][j] == ' ') {
-                        System.out.print(" _ ");
-                    } else {
-                        System.out.print(" " + field[i][j] + " ");
-                    }
-                }
-
-            }
-            // Печатаем разделитель между строками
-
-            if (i < 2) {
-                System.out.println();
-                System.out.println("---+----+---+");
-            }
-            if (i == 2) {
-                System.out.println();
-                System.out.println("---+----+---+");
-
+        printHorizontalDivider();
+        
+        for (int row = 0; row < field.length; row++) {
+            printRow(field[row]);
+            
+            // Print divider between rows (except after last row)
+            if (row < field.length - 1) {
+                printHorizontalDivider();
             }
         }
+        printHorizontalDivider();
+    }
+
+    /**
+     * Prints a single row of the game field.
+     * @param row the row to display
+     */
+    private void printRow(char[] row) {
+        for (int col = 0; col < row.length; col++) {
+            char cell = row[col] == ' ' ? '_' : row[col];
+            
+            if (col < row.length - 1) {
+                System.out.print(" " + cell + " |");
+            } else {
+                System.out.print(" " + cell + " ");
+            }
+        }
+        System.out.println();
+    }
+
+    /**
+     * Prints a horizontal divider between rows.
+     */
+    private void printHorizontalDivider() {
+        System.out.println("---+----+---");
     }
 }
