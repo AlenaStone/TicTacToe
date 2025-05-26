@@ -24,14 +24,33 @@ This is a classic TicTacToe game for two players. The game is played on a 3x3 gr
 
 ---
 
-## How to Run
+### Local (Console) Version
 
 1. Compile all `.java` files.
 2. Run the `Game` class.
 3. Follow the prompts in the console to enter moves.
 
----
+### Client-Server Version
 
+1. Open three terminal windows.
+2. In the first terminal, start the server:
+
+
+```bash
+mvn exec:java -Dexec.mainClass=at.fhj.msd.server.Server
+```
+
+3. In the second and third terminal, start the client:
+
+```bash
+mvn exec:java -Dexec.mainClass=at.fhj.msd.client.Client
+```
+
+4. Follow the prompts in the client console to play.
+
+**Note:** Make sure the server is running before starting the client.
+
+---
 ## Controls
 
 - Players enter row and column numbers to place their symbol.
@@ -42,17 +61,21 @@ This is a classic TicTacToe game for two players. The game is played on a 3x3 gr
 
 ## Requirements
 
-- Java 8 or higher.
+- Java 17 or higher.
+- Maven for building and running the project.
 - Console for input and output.
 
 ---
 
 ## Project Structure
 
-- `GameField.java` — manages the 3x3 board state.
-- `Game.java` — controls the game loop and logic.
-- `GameLook.java` — displays the board.
-- `Gamer.java` — stores player information.
+- `src/main/java/at/fhj/msd/game/GameField.java` — manages the 3x3 board state.
+- `src/main/java/at/fhj/msd/game/Game.java` — controls the game loop and logic.
+- `src/main/java/at/fhj/msd/game/GameLook.java` — displays the board.
+- `src/main/java/at/fhj/msd/game/Gamer.java` — stores player information.
+- `src/main/java/at/fhj/msd/server/Server.java` — server for networked play.
+- `src/main/java/at/fhj/msd/client/Client.java` — client for networked play.
+- `src/main/java/at/fhj/msd/shared/Message.java` — serializable messages for client-server communication.
 
 ---
 
@@ -62,6 +85,7 @@ This is a classic TicTacToe game for two players. The game is played on a 3x3 gr
 - Enhance UI with colors or graphics.
 - Add move undo functionality.
 - Support different board sizes.
+- Add support for multiple concurrent games on the server.
 
 ---
 
